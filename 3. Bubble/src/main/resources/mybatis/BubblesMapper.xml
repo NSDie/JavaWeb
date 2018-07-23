@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bubble.dao.BubblesMapper">
+  <resultMap id="BaseResultMap" type="com.bubble.bean.Bubbles">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="uid" property="uid" jdbcType="INTEGER"/>
+    <result column="title" property="title" jdbcType="VARCHAR"/>
+    <result column="time" property="time" jdbcType="TIMESTAMP"/>
+    <result column="latitude" property="latitude" jdbcType="DOUBLE"/>
+    <result column="longitude" property="longitude" jdbcType="DOUBLE"/>
+    <result column="image" property="image" jdbcType="VARCHAR"/>
+    <result column="deadline" property="deadline" jdbcType="TIMESTAMP"/>
+    <result column="anonymous" property="anonymous" jdbcType="INTEGER"/>
+    <result column="click" property="click" jdbcType="INTEGER"/>
+    <result column="type" property="type" jdbcType="INTEGER"/>
+    <result column="comments" property="comments" jdbcType="INTEGER"/>
+    <association property="miniUser" javaType="com.bubble.bean.MiniUser">
+      <result column="username" property="username" jdbcType="VARCHAR"/>
+      <result column="phone" property="phone" jdbcType="VARCHAR"/>
+      <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+    </association>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.bubble.bean.Bubbles" extends="BaseResultMap">
+    <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" suffix=")" prefixOverrides="and">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" suffix=")" prefixOverrides="and">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, uid, title, time, latitude, longitude, image, deadline, anonymous, click, type,
+    comments
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.bubble.bean.BubblesExample">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List"/>
+    ,
+    <include refid="Blob_Column_List"/>
+    from bubbles
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectNew" resultMap="ResultMapWithBLOBs">
+    select
+    b.id, b.uid, b.title, b.time,
+    b.latitude,b.longitude,b.image,b.deadline,b.anonymous,b.click,b.type,b.content,b.comments
+    ,u.username,u.phone,u.image as avatar
+    from bubbles b,user u where deadline &gt;= now() and b.uid=u.id
+  </select>
+  <select id="selectUser" resultMap="ResultMapWithBLOBs">
+    select
+    b.id, b.uid, b.title, b.time,
+    b.latitude,b.longitude,b.image,b.deadline,b.anonymous,b.click,b.type,b.content,b.comments
+    ,u.username,u.phone,u.image as avatar
+    from bubbles b ,user u where b.uid=u.id and uid = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectUserA" resultMap="ResultMapWithBLOBs">
+    select
+    b.id, b.uid, b.title, b.time,
+    b.latitude,b.longitude,b.image,b.deadline,b.anonymous,b.click,b.type,b.content,b.comments
+    ,u.username,u.phone,u.image as avatar
+    from bubbles b ,user u where b.uid=u.id and uid = #{id,jdbcType=INTEGER} and anonymous = 0
+  </select>
+
+  <select id="selectByBid" resultMap="ResultMapWithBLOBs">
+    select
+    b.id, b.uid, b.title, b.time,
+    b.latitude,b.longitude,b.image,b.deadline,b.anonymous,b.click,b.type,b.content,b.comments
+    ,u.username,u.phone,u.image as avatar
+    from bubbles b ,user u where b.uid=u.id and b.id=#{id}
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bubble.bean.BubblesExample">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List"/>
+    from bubbles
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    ,
+    <include refid="Blob_Column_List"/>
+    from bubbles
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bubbles
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bubble.bean.BubblesExample">
+    delete from bubbles
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bubble.bean.Bubbles">
+    insert into bubbles (id, uid, title,
+    time, latitude, longitude,
+    image, deadline, anonymous,
+    click, type, comments,
+    content)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+    #{time,jdbcType=TIMESTAMP}, #{latitude,jdbcType=DOUBLE}, #{longitude,jdbcType=DOUBLE},
+    #{image,jdbcType=VARCHAR}, #{deadline,jdbcType=TIMESTAMP}, #{anonymous,jdbcType=INTEGER},
+    #{click,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{comments,jdbcType=INTEGER},
+    #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bubble.bean.Bubbles">
+    insert into bubbles
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="deadline != null">
+        deadline,
+      </if>
+      <if test="anonymous != null">
+        anonymous,
+      </if>
+      <if test="click != null">
+        click,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="comments != null">
+        comments,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anonymous != null">
+        #{anonymous,jdbcType=INTEGER},
+      </if>
+      <if test="click != null">
+        #{click,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="comments != null">
+        #{comments,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bubble.bean.BubblesExample" resultType="java.lang.Integer">
+    select count(*) from bubbles
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update bubbles
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.uid != null">
+        uid = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.time != null">
+        time = #{record.time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.latitude != null">
+        latitude = #{record.latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.longitude != null">
+        longitude = #{record.longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="record.image != null">
+        image = #{record.image,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deadline != null">
+        deadline = #{record.deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.anonymous != null">
+        anonymous = #{record.anonymous,jdbcType=INTEGER},
+      </if>
+      <if test="record.click != null">
+        click = #{record.click,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.comments != null">
+        comments = #{record.comments,jdbcType=INTEGER},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause"/>
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update bubbles
+    set id = #{record.id,jdbcType=INTEGER},
+    uid = #{record.uid,jdbcType=INTEGER},
+    title = #{record.title,jdbcType=VARCHAR},
+    time = #{record.time,jdbcType=TIMESTAMP},
+    latitude = #{record.latitude,jdbcType=DOUBLE},
+    longitude = #{record.longitude,jdbcType=DOUBLE},
+    image = #{record.image,jdbcType=VARCHAR},
+    deadline = #{record.deadline,jdbcType=TIMESTAMP},
+    anonymous = #{record.anonymous,jdbcType=INTEGER},
+    click = #{record.click,jdbcType=INTEGER},
+    type = #{record.type,jdbcType=INTEGER},
+    comments = #{record.comments,jdbcType=INTEGER},
+    content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause"/>
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update bubbles
+    set id = #{record.id,jdbcType=INTEGER},
+    uid = #{record.uid,jdbcType=INTEGER},
+    title = #{record.title,jdbcType=VARCHAR},
+    time = #{record.time,jdbcType=TIMESTAMP},
+    latitude = #{record.latitude,jdbcType=DOUBLE},
+    longitude = #{record.longitude,jdbcType=DOUBLE},
+    image = #{record.image,jdbcType=VARCHAR},
+    deadline = #{record.deadline,jdbcType=TIMESTAMP},
+    anonymous = #{record.anonymous,jdbcType=INTEGER},
+    click = #{record.click,jdbcType=INTEGER},
+    type = #{record.type,jdbcType=INTEGER},
+    comments = #{record.comments,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause"/>
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bubble.bean.Bubbles">
+    update bubbles
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="anonymous != null">
+        anonymous = #{anonymous,jdbcType=INTEGER},
+      </if>
+      <if test="click != null">
+        click = #{click,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="comments != null">
+        comments = #{comments,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bubble.bean.Bubbles">
+    update bubbles
+    set uid = #{uid,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      image = #{image,jdbcType=VARCHAR},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
+    anonymous = #{anonymous,jdbcType=INTEGER},
+    click = #{click,jdbcType=INTEGER},
+    type = #{type,jdbcType=INTEGER},
+    comments = #{comments,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bubble.bean.Bubbles">
+    update bubbles
+    set uid = #{uid,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      image = #{image,jdbcType=VARCHAR},
+    deadline = #{deadline,jdbcType=TIMESTAMP},
+    anonymous = #{anonymous,jdbcType=INTEGER},
+    click = #{click,jdbcType=INTEGER},
+    type = #{type,jdbcType=INTEGER},
+    comments = #{comments,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

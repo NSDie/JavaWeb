@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <head>
+
+        <meta charset="utf-8"/>
+        <title>电影系统后台管理登录</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+
+        <!-- CSS -->
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+        <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+        <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'/>
+        <link rel="stylesheet" th:href="@{/css/reset.css}"/>
+        <link rel="stylesheet" th:href="@{/css/supersized.css}"/>
+        <link rel="stylesheet" th:href="@{/css/adminlogin.css}"/>
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+    </head>
+
+    <body>
+
+        <div class="page-container">
+            <h1>Login</h1>
+            <form th:action="@{/adminlogin}" method="post">
+                <input type="text" name="username" class="username" placeholder="Username"/>
+                <input type="password" name="password" class="password" placeholder="Password"/>
+                <button type="submit">Sign me in</button>
+                <div class="error"><span>+</span></div>
+            </form>
+            <div th:if="${param.error}">
+                <div class="alert alert-danger" style="width: 340px;margin-left: 41%;margin-top: 1%;">
+                    <strong>错误!</strong> 密码或者用户名错误。
+                </div>
+            </div>
+            <div class="connect">
+                <p>Or connect with:</p>
+                <p>
+                    <a class="facebook" href=""></a>
+                    <a class="twitter" href=""></a>
+                </p>
+            </div>
+        </div>
+
+
+
+        <!-- Javascript -->
+        <script th:src="@{/js/jquery-1.8.2.min.js}"></script>
+        <script th:src="@{/js/supersized.3.2.7.min.js}"></script>
+        <script th:src="@{/js/supersized-init.js}"></script>
+        <script th:src="@{/js/scripts.js}"></script>
+
+    </body>
+
+</html>
+

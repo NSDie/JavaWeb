@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="moviecomment:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="Movie-Comment-1.2-SNAPSHOT.war">
+      <element id="artifact" artifact-name="moviecomment:war exploded" />
+    </root>
+  </artifact>
+</component>

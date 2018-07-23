@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>泡泡工厂 1.0</title>
+    <meta charset="utf-8"/>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- 可选的Bootstrap主题文件（一般不使用） -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<div th:if="${param.error}">
+    <div class="alert alert-danger">
+        <strong>错误!</strong> 密码或者用户名错误。
+    </div>
+</div>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-4 column">
+        </div>
+        <div class="col-md-4 column">
+            <form class="form-inline" role="form" th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label for="username">账 号</label><input class="form-control" id="username" type="text"
+                                                            name="username"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">密 码</label><input class="form-control" id="password" type="password"
+                                                            name="password"/>
+                </div>
+                <br/>
+                <br/>
+                <button class="btn btn-default" type="submit">登录</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+

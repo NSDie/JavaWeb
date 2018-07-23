@@ -1,0 +1,30 @@
+<!doctype html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<!-- css files -->
+<link th:href="@{/css/style.css}" rel='stylesheet' type='text/css' media="all" />
+<!-- /css files -->
+</head>
+<body>
+<h1>电影评论系统</h1>
+<div class="log">
+	<div class="content1" style="margin-left: 25%">
+		<a style="text-decoration:none;margin-right:70%;color:white" th:href="@{/index}">回到首页</a>
+		<form>
+			<input placeholder="请输入用户名" type="text" id="username" ></input>
+			<input placeholder="请输入密码" type="password" id="password" ></input>
+			<div class="button-row">
+				<input type="button"  id="userlogin" class="sign-in" value="登录"></input>
+				<a  id="register" class="reset" href="register.html">注册</a>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" th:src="@{/js/login.js}"></script>
+<script th:src="@{/js/canvas.js}"></script>
+    </body>
+</html>

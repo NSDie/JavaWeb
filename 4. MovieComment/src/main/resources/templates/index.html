@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<title>电影评论系统</title>
+	<meta charset="utf-8"/>
+    <meta name="referrer" content="no-referrer" />
+	<!-- 引入样式 -->
+	<link rel="stylesheet" th:href="@{/css/element-ui.css}"/>
+	<!-- 引入组件库 -->
+	<script src="https://cdn.bootcss.com/element-ui/2.4.0/index.js"></script>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <link th:href="@{/css/index.css}" rel='stylesheet' type='text/css' media="all" />
+</head>
+
+<body>
+<div id="app">
+	<div class="header">
+		<div class="header-container">
+			<div class="search">
+				<a class="headline" th:href="@{'/index'}">电影首页</a>
+				<div class="search-container">
+					<div class="input-group">
+                        <input class="form-control" id="til" type="text" placeholder="电影、影人、电视剧" />
+						<span class="input-group-btn">
+                        	<botton class="btn btn-default" type="button" id="search">
+								<span  class="glyphicon glyphicon-search"></span>
+							</botton>
+                    	</span>
+					</div>
+
+				</div>
+                <p style="display: inline-block;margin-left: 10%;" th:text="'欢迎用户 '+${username}+'!'" th:if="${username} != null"></p> <a th:href="@{/userlogout}" th:if="${username} != null">注销</a>
+                <p style="display: inline-block;margin-left: 10%;" th:text="'您还未登录！'" th:if="${username} == null"></p>
+                <a th:href="@{/login}" th:if="${username} == null">登录</a>
+
+			</div>
+        </div>
+	</div>
+	<!-- header -->
+	<div class="" id="wrapper">
+		<h3 id="msg">精选电影</h3>
+		<div class="moviesList movieTag">
+		<div class="movie-container">
+			<div class="movieTag" th:each="movie:${movie}">
+				<ul style="padding:0; margin: 0 auto;">
+					<li class="film-pic">
+						<a>
+							<img class="movieImg" th:src="${movie.image}"/>
+						</a>
+					</li>
+					<li class="film-name">
+						<a th:href="@{'/subject/' + ${movie.mid}}" th:text="${movie.title}"></a>
+					</li>
+					<li class="film-rate">
+						<div class="el-rate" style="display: inline-block;">
+							<span class="el-rate__item" style="cursor: auto;">
+								<i class="el-rate__icon el-icon-star-on" style="color: rgb(247, 186, 42);">
+									<!----></i></span><span class="el-rate__item" style="cursor: auto;">
+							<i class="el-rate__icon el-icon-star-on" style="color: rgb(247, 186, 42);">
+								<!----></i></span><span class="el-rate__item" style="cursor: auto;">
+							<i class="el-rate__icon el-icon-star-on" style="color: rgb(247, 186, 42);">
+								<!----></i></span><span class="el-rate__item" style="cursor: auto;">
+							<i class="el-rate__icon el-icon-star-on" style="color: rgb(247, 186, 42);">
+								<!----></i></span><span class="el-rate__item" style="cursor: auto;">
+							<i class="el-rate__icon el-icon-star-on" style="color: rgb(239, 242, 247);">
+								<i class="el-rate__decimal el-icon-star-on" style="width: 50%; color: rgb(247, 186, 42);">
+								</i>
+							</i>
+						</span>
+						</div>
+						<span class="rateNum" th:text="${movie.average}" style="display: inline-block; font-size: 12px;"></span>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+		<div id="footer">
+			<div class="footer-extra"></div>
+
+			<span class="fleft gray-link" id="icp">
+    © 系统搭建时间：2018/6/15  all rights reserved 1095299292@qq.com
+</span>
+
+			<span class="fright">
+            <span>友情链接：</span>
+    <a href="https://www.douban.com/about">关于豆瓣</a>
+    · <a href="https://developers.douban.com/">豆瓣开发者中心</a>
+
+</span>
+
+		</div>
+	</div>
+</div>
+<script th:src="@{/js/canvas.js}"></script>
+<script th:src="@{/js/search.js}"></script>
+</body>
+</html>

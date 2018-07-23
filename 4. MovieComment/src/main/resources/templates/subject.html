@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${movie.title}"></title>
+    <meta charset="utf-8"/>
+    <meta name="referrer" content="no-referrer" />
+    <!-- 引入样式 -->
+    <link rel="stylesheet" th:href="@{/css/element-ui.css}"/>
+    <!-- 引入组件库 -->
+    <script src="https://cdn.bootcss.com/element-ui/2.4.0/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+    <link th:href="@{/css/index.css}" rel='stylesheet' type='text/css' media="all" />
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <div class="header-container">
+            <div class="search">
+                <a class="headline" th:href="@{'/index'}">电影首页</a>
+                <div class="search-container">
+
+                    <div class="input-group">
+                        <input class="form-control" id="til" type="text" placeholder="电影、影人、电视剧" />
+                        <span class="input-group-btn">
+                        	<botton class="btn btn-default" type="button" id="search">
+								<span  class="glyphicon glyphicon-search"></span>
+							</botton>
+                    	</span>
+                    </div>
+
+                </div>
+                <p id="person" style="display: inline-block;margin-left: 10%;" th:text="'欢迎用户 '+${username}+'!'" th:if="${username} != null"></p> <a th:href="@{/userlogout}" th:if="${username} != null">注销</a>
+                <p style="display: inline-block;margin-left: 10%;" th:text="'您还未登录！'" th:if="${username} == null"></p>
+                <a th:href="@{/login}" th:if="${username} == null">登录</a>
+
+            </div>
+        </div>
+    </div>
+    <!-- header -->
+    <div class="container-moving" style="position: static;">
+        <div class="content">
+            <h1>
+                <span class="title" th:text="${movie.title}"></span>
+                <span class="year" th:text="'('+${movie.year}+')'"></span>
+            </h1>
+            <div class="detail clearfix">
+                <div class="left-side">
+                    <div class="actor-list">
+                        <div class="subject">
+                            <div class="mainpic">
+                            <a href="">
+                                <img class="movieImg" th:src="${movie.image}" />
+                            </a>
+                            </div>
+                            <div class="info">
+                                <span class="p1">导演：</span>
+                                <span class="attrs"></span><br/>
+                                <span class="p1">主演：</span>
+                                <span class="attrs"></span><br/>
+                                <span class="p1">类型：</span>
+                                <span class="attrs" th:text="${movie.genres}"></span><br/>
+                                <span class="p1">IMDB链接：</span>
+                                <span class="attrs"></span><br/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gtleft">
+                        <ul class="ul">
+                            <li>
+                                <img alt="" src="https://img3.doubanio.com/f/shire/cc03d0fcf32b7ce3af7b160a0b85e5e66b47cc42/pics/short-comment.gif"/>
+                                <a href="">写短评</a>
+                            </li>
+                            <li>
+                                <img alt="" src="https://img3.doubanio.com/f/shire/5bbf02b7b5ec12b23e214a580b6f9e481108488c/pics/add-review.gif"/>
+                                <a href="">写影评</a>
+                            </li>
+                            <li>
+                                <img alt="" src="https://img3.doubanio.com/f/shire/61cc48ba7c40e0272d46bb93fe0dc514f3b71ec5/pics/add-doulist.gif"/>
+                                <a href="">提问题</a>
+                            </li>
+                            <li>
+                                <img alt="" src="https://img3.doubanio.com/f/shire/61cc48ba7c40e0272d46bb93fe0dc514f3b71ec5/pics/add-doulist.gif"/>
+                                <a href="">添加到豆列</a>
+                            </li>
+                            <li>
+                                <img alt="" src=""/><a href="">分享到</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="summary">
+                        <p class="summary-title" th:text="${movie.title}+'的剧情简介  ·  ·  ·  ·  ·  ·'"></p>
+                        <p class="intro" th:text="'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+${movie.summary}"></p>
+                    </div>
+                    <div class="movie-comment">
+                        <p class="movie-comment-title" th:text="${movie.title}+'的短评 · · · · · ·'">
+                            <span>（1条评论）</span>
+                        </p>
+
+                                <div class="comment-send " style="padding-bottom: 20px;">
+                                    <form id="AddComment" class="textarea-container focus" th:action="@{/subject/comment}" th:object="${comment}" method="POST">
+											<textarea  class="ipt-txt" id="msg" th:field="*{content}" placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。" rows="5" cols="80"></textarea>
+                                        <button class="comment-submit" type="submit" >发表评论</button>
+                                    </form>
+                                </div>
+                                <div class="comment-list" th:each="commentList:${commentList}" style="padding: 22px 0px 14px; border-top-color: rgb(229, 233, 239); border-top-width: 1px; border-top-style: solid;">
+
+                                    <p class="username" style="color: rgb(251, 114, 153) !important;" th:text="${commentList.user.username}"></p>
+                                    <p class="comment-text" style="color: black;" th:text="${commentList.comment.content}"></p>
+                                    <p>
+                                        <span class="time" style="margin-right:20px" th:text="${commentList.comment.createdAt}"></span>
+                                        <span class="like" style="margin-left: 20px;">
+                                            <i></i>
+                                            <span id="like-count" th:text="${commentList.comment.usefulCount}"></span>
+                                        </span>
+                                    </p>
+
+                                </div>
+                    </div>
+
+                </div>
+                <div class="right-side">
+                    <div class="ticket">
+                        <a class="ticket-btn" href="https://movie.douban.com/cinema/nowplaying/fuzhou/">
+                            豆瓣购票23元起
+                        </a>
+                    </div>
+                    <div class="game-pic">
+                        <img alt="" src=" https://img3.doubanio.com/img/files/file-1489162292.jpg "/>
+                    </div>
+                    <div class="qrcode-app">
+                        <a href="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <div class="footer-extra"></div>
+
+            <span class="fleft gray-link" id="icp">
+    © 系统搭建时间：2018/6/15  all rights reserved 1095299292@qq.com
+</span>
+
+            <span class="fright">
+            <span>友情链接：</span>
+    <a href="https://www.douban.com/about">关于豆瓣</a>
+    · <a href="https://developers.douban.com/">豆瓣开发者中心</a>
+
+</span>
+
+        </div>
+    </div>
+
+</div>
+<script th:src="@{/js/canvas.js}"></script>
+<script th:src="@{/js/search.js}"></script>
+<script th:src="@{/js/subject.js}"></script>
+</body>
+</html>
